@@ -1,0 +1,12 @@
+{
+  "url": "https://www.youtube.com/watch?v=DEMO0000001",
+  "title": "Synthetic example — Gradient descent",
+  "channel": "Offline test fixture; not a real lecture",
+  "duration": 90,
+  "caption_source": "user-provided",
+  "language": "en",
+  "coverage": "complete",
+  "description": "An invented short lesson used only to exercise the local pipeline.",
+  "chapters": [],
+  "warnings": ["Synthetic fixture: the video ID and captions are invented. Links demonstrate formatting and do not identify a source lecture."]
+}

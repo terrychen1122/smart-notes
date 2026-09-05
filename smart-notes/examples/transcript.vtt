@@ -1,0 +1,19 @@
+WEBVTT
+
+00:00.000 --> 00:14.000
+Our aim is to minimize J of theta. Theta is the parameter and J is the objective.
+
+00:14.000 --> 00:30.000
+The gradient gives the local direction of steepest increase of a differentiable objective.
+
+00:30.000 --> 00:45.000
+We update theta by subtracting alpha times the gradient of J at the current theta. Alpha is a positive learning rate.
+
+00:45.000 --> 01:00.000
+For J of theta equals theta squared, start at theta equals two. The derivative is two theta, so the gradient here is four.
+
+01:00.000 --> 01:14.000
+With alpha equal to one tenth, the next theta is two minus point four, or one point six.
+
+01:14.000 --> 01:30.000
+An excessive learning rate can overshoot. The useful step size depends on the shape of the objective.

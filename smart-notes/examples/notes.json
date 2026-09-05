@@ -1,0 +1,29 @@
+{
+  "mode": "notes",
+  "overview": "This synthetic lesson introduces gradient descent: use the gradient of an objective to choose a local update, then scale that update with a learning rate.",
+  "visual_status": "Transcript-only offline fixture. No video or screenshots were inspected.",
+  "sections": [
+    {
+      "id": "objective",
+      "summary": "The optimization problem is to find a parameter value that minimizes an objective. For a differentiable objective, the gradient indicates the local direction of steepest increase.",
+      "definitions": ["$\\theta$: parameter being optimized.", "$J(\\theta)$: objective to minimize.", "Gradient: local direction of steepest increase."]
+    },
+    {
+      "id": "update",
+      "summary": "Subtract a positive learning rate times the current gradient. The worked one-dimensional example evaluates the derivative first, then applies the update.",
+      "equations": ["\\theta_{k+1}=\\theta_k-\\alpha\\nabla J(\\theta_k)", "J(\\theta)=\\theta^2,\\qquad J'(\\theta)=2\\theta"],
+      "definitions": ["$\\alpha$: positive learning rate."],
+      "examples": ["1. Start at $\\theta_0=2$ with $\\alpha=0.1$.\n2. Evaluate the derivative: $J'(2)=4$.\n3. Update: $\\theta_1=2-0.1(4)=1.6$."],
+      "added_explanations": ["As a supplementary check, the objective falls from $J(2)=4$ to $J(1.6)=2.56$. These objective values are computed here, not spoken in the fixture."]
+    },
+    {
+      "id": "step-size",
+      "summary": "A learning rate that is too large can overshoot. The appropriate scale depends on the objective's shape.",
+      "common_mistakes": ["Assuming that increasing the learning rate always improves progress."],
+      "uncertainties": ["The fixture does not provide a general step-size bound or convergence guarantee."]
+    }
+  ],
+  "key_concepts": ["The gradient sets a local direction; the learning rate controls how far to move."],
+  "review_points": ["Reproduce the update from 2 to 1.6 without looking at the worked example.", "Why does the gradient descent update subtract the gradient?"],
+  "warnings": []
+}
