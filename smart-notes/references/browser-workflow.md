@@ -6,7 +6,14 @@ This reference describes observable UI steps, not a fixed DOM implementation.
 If that capability is unavailable, request timestamped captions and, when needed,
 user-provided screenshots. Do not substitute an undocumented network endpoint.
 
-## Transcript and metadata
+## Language confirmation, transcript, and metadata
+
+Before acquisition, ask the user to confirm the desired note language beside the
+video's own language. Once the source language is visible, state it explicitly and
+ask whether the notes should remain in that language or include another language.
+Record the source language in `metadata.language` and the confirmed note language in
+`metadata.note_language`. If they differ, the final notes must contain both source
+and translated text in the same Markdown and PDF deliverables.
 
 1. Open the supplied watch URL. Confirm the title and channel of the requested
    video. For playlists, operate on the requested video unless the user asked for
@@ -52,16 +59,23 @@ For each pending frame:
    plan rather than assigning the wrong section. Limit retries to two nearby
    positions for a candidate; then reject or mark unavailable with the reason.
 4. Capture the player area using a supported element/region screenshot if
-   available. Otherwise use a page screenshot with the full player readable.
-   Move the pointer away and dismiss player overlays using observed controls.
+   available. The crop must be the complete visible video rectangle: include the
+   full top, bottom, left, and right edges of the frame, but exclude browser chrome,
+   the page title, recommendations, comments, transcript panels, and other page
+   content. If only a page screenshot is available, crop it to the player bounds
+   before saving and verify that no part of the video frame was cut off. Move the
+   pointer away and dismiss player overlays using observed controls when possible.
    Save to the working directory with a stable filename, for example
    `captures/frame-001.png`. Never save an HTML/login page as an image.
 5. Visually inspect the capture. Keep it only if legible and useful beyond speech.
    Describe the actual information, not the hoped-for content. Reject near-duplicate
-   slides unless a changed equation or example step matters. A slide may be kept
-   even if the speaker is also visible.
+   slides unless a changed equation or example step matters. Do not reject a frame
+   merely because the speaker is visible: a clear exercise setup, gesture, posture,
+   demonstration, or side-by-side comparison is valid lecture evidence. Reject a
+   generic talking-head frame that adds no visual information.
 6. Record a review entry. Allowed visual types: `slide`, `diagram`, `equation`,
-   `chart`, `code`, `worked-example`. Record rejected/unavailable candidates too.
+   `chart`, `code`, `worked-example`, `demonstration`, `comparison`. Record
+   rejected/unavailable candidates too.
    The helper resolves image paths relative to the reviews file. Do not use
    screenshots of the whole transcript as key frames.
 

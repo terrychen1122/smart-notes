@@ -29,9 +29,12 @@ def escape(text):
 
 def validate_notes(notes, timeline):
     require(isinstance(notes, dict), "Notes must be an object")
-    require(not (set(notes) - {"mode", "overview", "visual_status", "sections", "key_concepts", "review_points", "warnings"}),
+    require(not (set(notes) - {"mode", "source_language", "output_language", "overview", "visual_status", "sections", "key_concepts", "review_points", "warnings"}),
             "Unknown notes field; see references/artifacts.md")
     require(notes.get("mode") in MODES, "Invalid notes mode")
+    for field in ("source_language", "output_language"):
+        if field in notes:
+            nonempty(notes[field], "notes." + field)
     nonempty(notes.get("overview"), "notes.overview")
     nonempty(notes.get("visual_status"), "notes.visual_status")
     for field in ("key_concepts", "review_points", "warnings"):
@@ -70,11 +73,15 @@ def render(timeline, manifest, notes, output):
         copied[frame["id"]] = quote(destination.relative_to(output.parent).as_posix(), safe="/")
 
     video = timeline["video"]
+    source_language = notes.get("source_language", video.get("language", "unknown"))
+    output_language = notes.get("output_language", source_language)
+    language_line = f"Source language: {escape(source_language)} · Note language: {escape(output_language)}"
+    if source_language != output_language:
+        language_line += " · Bilingual source + translation"
     lines = ["# " + escape(video["title"]), "",
              f"[Watch video]({video['url']}) · {escape(video['channel'])} · {stamp(video['duration'])}", "",
-             f"Mode: {notes['mode']} · Captions: {escape(video['caption_source'])} · "
-             f"Language: {escape(video.get('language', 'unknown'))} · Coverage: {video['coverage']}", "",
-             "Visual inspection: " + notes["visual_status"], ""]
+             f"Captions: {escape(video['caption_source'])} · {language_line} · Coverage: {video['coverage']}", "",
+             "Visuals: " + notes["visual_status"], ""]
     warnings = list(video.get("warnings", [])) + notes.get("warnings", [])
     if video["coverage"] != "complete":
         warnings.insert(0, "Transcript coverage is " + video["coverage"] + "; these notes may omit unobserved material.")

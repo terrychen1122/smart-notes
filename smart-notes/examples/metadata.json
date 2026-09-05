@@ -5,6 +5,7 @@
   "duration": 90,
   "caption_source": "user-provided",
   "language": "en",
+  "note_language": "en",
   "coverage": "complete",
   "description": "An invented short lesson used only to exercise the local pipeline.",
   "chapters": [],

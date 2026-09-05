@@ -27,7 +27,8 @@ You need:
 - For live videos: a working Browser capability that can read YouTube's transcript
   panel, seek the video, capture screenshots, and save them locally.
 
-The Python helpers need no third-party packages or API key. The skill is stored
+The caption and timeline helpers need no third-party packages or API key. PDF export
+uses ReportLab and Pillow. The skill is stored
 locally in this project and has not been installed globally; reference its file
 path in your request.
 
@@ -41,7 +42,7 @@ for this lecture: <YOUTUBE_URL>
 
 Preserve important equations, definitions, worked examples, and useful
 slides or diagrams. Include timestamp links and flag uncertain captions.
-Save the final Markdown and any images under output/my-lecture/deliverable/.
+Save the final Markdown, PDF, and any images under output/my-lecture/deliverable/.
 ```
 
 Choose a different output folder for each lecture. You do not need to manually
@@ -72,8 +73,11 @@ Use smart-notes/SKILL.md in quick mode for <YOUTUBE_URL>.
 Keep it concise and include links to the main sections.
 ```
 
-You can also specify the output language, topics to emphasize, or whether to omit
-screenshots. Review questions are generated study aids, not predictions about an exam.
+At the start of every run, Codex confirms the video's own language and asks which
+language you want for the notes. If you choose a different language, the original
+and translation appear together in the same Markdown and PDF note. You can also
+specify topics to emphasize or whether to omit screenshots. Review questions are
+generated study aids, not predictions about an exam.
 
 ## 4. What happens during a run
 
@@ -84,6 +88,7 @@ screenshots. Review questions are generated study aids, not predictions about an
 5. Codex seeks, captures, and inspects those frames, retaining only useful evidence.
 6. Codex writes notes grounded in the transcript and retained frames.
 7. The renderer checks the artifacts and creates Markdown with timestamp links.
+8. The PDF renderer packages the notes and retained screenshots into `notes.pdf`.
 
 Frames are not selected simply because a fixed interval has elapsed. A readable
 equation or diagram can be useful; a duplicate slide or speaker-only shot may be
@@ -96,13 +101,14 @@ For the first example prompt, expect:
 ```text
 output/my-lecture/deliverable/
 ├── notes.md
+├── notes.pdf
 └── notes.assets/   # Created only when screenshots are retained
 ```
 
 Open `notes.md` in a Markdown viewer. A viewer with LaTeX math support will display
 equations more clearly. Timestamp links open the corresponding point on YouTube.
 
-Keep `notes.md` and `notes.assets/` together when moving or sharing the result.
+Keep `notes.md`, `notes.pdf`, and `notes.assets/` together when moving or sharing the result.
 Images use relative links. Working files such as transcripts, timeline JSON, and
 review records may also be saved under the lecture's output folder; they are not
 needed to read the final Markdown.
@@ -125,6 +131,7 @@ Channel: <CHANNEL_NAME>
 Video duration: <DURATION_IN_SECONDS>
 Caption source: <creator, auto, unknown, or user-provided>
 Caption language: <LANGUAGE>
+Requested note language: <LANGUAGE>
 Coverage: <complete, partial, or unknown>
 
 Make this transcript-only. State that visuals were not inspected.
@@ -172,12 +179,12 @@ python3 -m unittest discover -s tests -v
 | Captions are incomplete or technically inaccurate | Ask for explicit coverage limitations and localized uncertainty; provide corrected evidence when available. |
 | Rendering reports pending frames | Review each candidate as `keep`, `reject`, or `unavailable` before rendering. |
 | A retained image is missing | Restore the capture file or revise its review, then render again. |
-| Images disappear after sharing | Share the sibling `notes.assets/` folder as well as the Markdown file. |
+| Images disappear after sharing | Share `notes.md`, `notes.pdf`, and the sibling `notes.assets/` folder together. |
 
 Live YouTube capture has not yet been validated in this environment because browser
 setup failed. The offline pipeline and its tests have passed. V1 does not include
-automatic video downloading, OCR, perceptual frame-change detection, audio
-transcription, or PDF/HTML/Notion export.
+automatic video downloading, OCR, perceptual frame-change detection, or audio
+transcription.
 
 For custom pipeline work, see the
 [artifact formats and commands](smart-notes/references/artifacts.md). For browser

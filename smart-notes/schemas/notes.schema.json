@@ -6,6 +6,8 @@
   "required": ["mode", "overview", "visual_status", "sections"],
   "properties": {
     "mode": {"enum": ["notes", "detailed", "exam-review", "concepts", "quick"]},
+    "source_language": {"$ref": "#/$defs/text"},
+    "output_language": {"$ref": "#/$defs/text"},
     "overview": {"$ref": "#/$defs/text"},
     "visual_status": {"$ref": "#/$defs/text"},
     "warnings": {"$ref": "#/$defs/textList"},

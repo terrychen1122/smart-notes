@@ -1,5 +1,7 @@
 {
   "mode": "notes",
+  "source_language": "en",
+  "output_language": "en",
   "overview": "This synthetic lesson introduces gradient descent: use the gradient of an objective to choose a local update, then scale that update with a learning rate.",
   "visual_status": "Transcript-only offline fixture. No video or screenshots were inspected.",
   "sections": [

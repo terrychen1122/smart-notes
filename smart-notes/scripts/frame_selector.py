@@ -4,7 +4,8 @@ from pathlib import Path
 
 from common import image_file, nonempty, read_json, require, run_cli, seconds, seek_url, validate_timeline, write_json
 
-VISUAL_TYPES = ("slide", "diagram", "equation", "chart", "code", "worked-example")
+VISUAL_TYPES = ("slide", "diagram", "equation", "chart", "code", "worked-example",
+                "demonstration", "comparison")
 
 
 def plan_frames(timeline, candidates, maximum=3):

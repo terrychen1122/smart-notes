@@ -89,6 +89,8 @@ def validate_video(video):
     require(seconds(video.get("duration")) > 0, "video.duration must be positive")
     require(video.get("caption_source") in ("creator", "auto", "unknown", "user-provided"),
             "Invalid caption_source")
+    if "note_language" in video:
+        nonempty(video["note_language"], "video.note_language")
     require(video.get("coverage") in ("complete", "partial", "unknown"), "Invalid coverage")
     strings(video.get("warnings", []), "video.warnings")
 

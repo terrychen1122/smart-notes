@@ -2,7 +2,7 @@
 
 [Watch video](https://www.youtube.com/watch?v=DEMO0000001) · Offline test fixture; not a real lecture · 01:30
 
-Mode: notes · Captions: user-provided · Language: en · Coverage: complete
+Captions: user-provided · Source language: en · Note language: en · Coverage: complete
 
 Visual inspection: Transcript-only offline fixture. No video or screenshots were inspected.
 

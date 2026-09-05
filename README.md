@@ -1,13 +1,14 @@
 # smart-notes
 
-A Codex skill for turning YouTube lectures into timestamped study notes grounded
-in captions and reviewed screenshots.
+A Codex skill for turning YouTube lectures into timestamped Markdown and PDF study
+notes grounded in captions and reviewed screenshots.
 
 V1 combines browser acquisition and Codex reasoning with Python helpers for caption
-normalization, semantic timeline alignment, frame review records, and Markdown output.
-The helpers use Python 3.9+ with no third-party dependencies or API key. They are not
-a standalone video-to-summary service: Codex chooses sections, inspects frames, and
-writes notes.
+normalization, semantic timeline alignment, frame review records, and Markdown/PDF
+output. The caption and timeline helpers use Python 3.9+ with no third-party
+dependencies; PDF export additionally uses ReportLab and Pillow. No API key is
+required. This is not a standalone video-to-summary service: Codex chooses sections,
+inspects frames, and writes notes.
 
 ## How it works
 
@@ -50,13 +51,14 @@ python3 smart-notes/scripts/timeline.py output/demo/transcript.json --sections s
 python3 smart-notes/scripts/frame_selector.py plan output/demo/timeline.json --candidates smart-notes/examples/candidates.json --output output/demo/frame-plan.json
 python3 smart-notes/scripts/frame_selector.py review output/demo/frame-plan.json --reviews smart-notes/examples/reviews.json --output output/demo/frames.json
 python3 smart-notes/scripts/render_notes.py output/demo/timeline.json --frames output/demo/frames.json --notes smart-notes/examples/notes.json --output output/demo/notes.md
+python3 smart-notes/scripts/render_pdf.py output/demo/notes.md --output output/demo/notes.pdf
 python3 -m unittest discover -s tests -v
 ```
 
 The example uses invented captions and an explicitly unavailable visual candidate.
-It creates `output/demo/notes.md`; a representative rendered copy is included at
+It creates `output/demo/notes.md` and `output/demo/notes.pdf`; a representative rendered copy is included at
 [examples/sample-output.md](smart-notes/examples/sample-output.md).
-For real captures, keep `notes.md` beside `notes.assets/` when moving or sharing it.
+For real captures, keep `notes.md`, `notes.pdf`, and `notes.assets/` together when moving or sharing the result.
 Raw captions remain working evidence and are not reproduced in the final notes.
 
 ## V1 boundaries
@@ -64,8 +66,8 @@ Raw captions remain working evidence and are not reproduced in the final notes.
 Semantic segmentation and image selection are agent tasks, not timing heuristics.
 The pipeline validates artifact structure and evidence references; it cannot prove
 the accuracy of an authored explanation or inspect screenshot legibility itself.
-Perceptual frame-change detection, OCR, audio transcription, automatic downloading,
-and PDF/HTML/Notion export are deferred.
+Perceptual frame-change detection, OCR, audio transcription, and automatic video
+downloading are deferred.
 
 Local fixtures and image-handling tests validate the Python pipeline. Live YouTube
 capture has not been validated in this environment because its browser connection

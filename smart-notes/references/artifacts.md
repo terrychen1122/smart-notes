@@ -1,6 +1,7 @@
 # Artifact contracts and commands
 
-All helpers require Python 3.9+ and its standard library only. All times are seconds
+Caption, timeline, and validation helpers require Python 3.9+ and its standard library;
+PDF export additionally requires ReportLab and Pillow. All times are seconds
 (finite, nonnegative numbers) in normalized files. Input timestamp fields may also
 use `MM:SS`, `HH:MM:SS`, or fractional clock values. Cue and section intervals are
 half-open `[start, end)`; overlapping cues are permitted. Every pipeline output uses
@@ -23,6 +24,7 @@ external validators; runtime checks use the Python helpers without a schema pack
   "duration": 120,
   "caption_source": "auto",
   "language": "en",
+  "note_language": "en",
   "coverage": "partial",
   "description": "Observed description, if available",
   "chapters": [{"start": 0, "title": "Introduction"}],
@@ -34,7 +36,9 @@ Replace `VIDEO_ID_11` with the actual 11-character ID. Duration is the observed 
 duration, not an estimate from the last transcript row. `title`, `channel`, `url`,
 and positive `duration` are required. Caption source defaults to `unknown`; coverage
 defaults to `unknown`. Allowed values are in SKILL.md/browser-workflow.md. Optional
-metadata is preserved. Only mark coverage complete after checking extraction.
+metadata is preserved. `language` is the video's own language; `note_language` is
+the user's confirmed requested note language. Only mark coverage complete after
+checking extraction.
 
 Supported caption inputs:
 
@@ -98,7 +102,10 @@ Codex writes `candidates.json`:
 python3 smart-notes/scripts/frame_selector.py plan output/lecture/timeline.json --candidates output/lecture/candidates.json --output output/lecture/frame-plan.json
 ```
 
-Use `--max-per-section 1` for quick mode and `2` for concepts. Empty lists are valid.
+Use `--max-per-section 1` for quick mode and `2` for concepts. In the default notes
+mode, keep distinct visual anchors across the substantive sections; a short lecture
+will often have 4–6 retained frames overall. Empty lists are valid when the video
+has no useful visual evidence.
 The plan stores the video URL, section bounds, and `frames` with IDs, requested times,
 reasons, `seek_url`, and `status: pending`. These candidates are not selected evidence
 until visually reviewed. Keep this file synchronized if the timeline is revised.
@@ -139,6 +146,8 @@ Codex writes `notes.json`:
 ```json
 {
   "mode": "notes",
+  "source_language": "en",
+  "output_language": "en",
   "overview": "A transformed synthesis grounded in the observed lecture.",
   "visual_status": "One diagram inspected and retained; other sections checked for useful visual candidates.",
   "sections": [
@@ -158,7 +167,10 @@ Codex writes `notes.json`:
 }
 ```
 
-Required: `mode`, `overview`, `visual_status`, and `sections`. Every timeline section
+Required: `mode`, `overview`, `visual_status`, and `sections`. When language metadata
+is present, `source_language` is the video's language and `output_language` is the
+confirmed note language. If they differ, every learner-facing note block must contain
+both languages in the same deliverable. Every timeline section
 must have exactly one notes entry with its `id` and nonempty `summary`. Other optional
 section fields are string lists: `key_ideas`, `definitions`, `equations`, `examples`,
 `instructor_intuition`, `common_mistakes`, `added_explanations`, `uncertainties`.
@@ -171,13 +183,15 @@ equations or examples merely to fill a category.
 
 ```sh
 python3 smart-notes/scripts/render_notes.py output/lecture/timeline.json --frames output/lecture/frames.json --notes output/lecture/notes.json --output output/lecture/deliverable/notes.md
+python3 smart-notes/scripts/render_pdf.py output/lecture/deliverable/notes.md --output output/lecture/deliverable/notes.pdf
 ```
 
 Rendering validates timeline alignment, exact notes coverage, reviewed frames, image
 files, and matching video identity before writing. It carries source warnings into
 the notes, marks partial coverage, embeds only kept images, and uses observed frame
-times for links. It copies images to `notes.assets/` with relative links, so share
-the Markdown and that directory together. Files are reused by content hash; reruns
-do not delete older assets. The raw transcript is not included in the Markdown.
+times for links. `render_pdf.py` packages the rendered Markdown and all referenced
+screenshots into a paginated PDF. Share `notes.md`, `notes.pdf`, and `notes.assets/`
+together. Files are reused by content hash; reruns do not delete older assets. The
+raw transcript is not included in the Markdown or PDF.
 
 The synthetic fixture in `examples/` exercises the same commands entirely offline.
