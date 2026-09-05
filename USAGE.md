@@ -9,11 +9,7 @@ and validate the evidence; they do not independently watch or summarize a video.
 
 ## 1. Open the project
 
-Open this project folder in Codex:
-
-```text
-/Users/xuchen/Developer/Github/smart-notes
-```
+Open the cloned `smart-notes` project folder in Codex.
 
 The skill entry point is inside the project:
 
@@ -169,7 +165,7 @@ python3 -m unittest discover -s tests -v
 
 | Issue | What to do |
 | --- | --- |
-| Codex does not locate the skill | Include the full path: `/Users/xuchen/Developer/Github/smart-notes/smart-notes/SKILL.md`. |
+| Codex does not locate the skill | Open the project folder in Codex and reference `smart-notes/SKILL.md` relative to that folder. |
 | A command cannot find a script | Run it from the outer project folder, alongside `README.md`. |
 | Browser connection fails | Supply saved captions and request transcript-only notes, or restore browser access before retrying. |
 | YouTube has no accessible transcript | Provide an existing caption file. V1 does not transcribe audio. |
